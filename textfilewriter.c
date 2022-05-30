@@ -9,8 +9,9 @@ void print_file(FILE* stream);
 
 
 void create_music_titles(FILE* stream) {
-	if (stream == NULL) {
-		// When, Can't find the file
+	//int num_of_song = fgetc(stream);
+	if (feof(stream)) {
+		// When, File is Empty
 		int start_music_num;
 		printf("Number of music: "); 
 		scanf("%d", &start_music_num);
@@ -18,7 +19,7 @@ void create_music_titles(FILE* stream) {
 		char music_name[MAX_TITLE_SIZE];
 		for (int i=0; i<start_music_num; i++){
 			scanf("%s", music_name);
-			append_left(MAX_TITLE_SIZE, music_name);
+			//append_left(MAX_TITLE_SIZE, music_name);
 		}
 		return;
 	}
@@ -28,23 +29,27 @@ void create_music_titles(FILE* stream) {
 		fscanf(stream, "%d\n", &num_of_song);
 
 		// If file is empty
+		/*
 		if(num_of_song == -1){
 			printf("Empty File!\n");
 			return;
 		}
-
+		*/
+		
 		for(int i=0; i<num_of_song; i++){
 			*(title_of_song + i) = (char*)malloc(sizeof(char*));
 			fgets(title_of_song[i], MAX_TITLE_SIZE, stream); 
-			append_left(MAX_TITLE_SIZE, title_of_song[i]);
+			//append_left(MAX_TITLE_SIZE, title_of_song[i]);
 		}
 
+		// Check title_of_song and free dynamic alloc
 		for (int i=0; i<num_of_song; i++){
 			printf("%s", title_of_song[i]);
 			free(*(title_of_song+i));
 		}
 		return;
 	}
+
 	return;
 }
 
@@ -118,3 +123,12 @@ void read_file(char* file_name) {
 
 }
 
+int main(){
+	FILE* fp = fopen("Text.txt", "r");
+	create_music_titles(fp);
+	fclose(fp);
+	FILE* fp_2 = fopen("Text2.txt","r");
+	create_music_titles(fp_2);
+	fclose(fp_2);
+	return 0;
+}
